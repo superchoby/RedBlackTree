@@ -1,5 +1,6 @@
 #include "PracticeBST.cpp"
-
+// #include "BST.cpp"
+#include <iostream>
 int main(){
   BST* tree = new BST();
   tree->insert(5);
@@ -11,6 +12,22 @@ int main(){
   tree->insert(2);
   tree->insert(25);
   tree->insert(250);
+  // tree->deleter(2);
+  // tree->deleter(250);
+  // tree->deleter(5);
+  tree->deleter(1);
+  // tree->deleter(7);
+  tree->deleter(3);
+  tree->deleter(25);
+  // tree->deleter(200);
+  tree->deleter(250);
+  tree->deleter(2);
+  tree->deleter(5);
 
   tree->printTree();
+  // tree->deleter(7);
+  // std::cout << "lskdf" << std::endl;
+  // std::cout << "lskdf" << std::endl;
+  // std::cout << "lskdf" << std::endl;
+  // tree->printTree();
 }

@@ -139,13 +139,14 @@ bool BST::deleter(int k){
   TreeNode* parent = current;
   bool isLeft;
   while(true){
-    parent = current;
     if(current == nullptr){
       return false;
     }
     if(k == current->data){
       break;
-    }else if(k < current->data){
+    }
+    parent = current;
+    if(k < current->data){
       current = current->left;
       isLeft = true;
     }else{
@@ -155,7 +156,9 @@ bool BST::deleter(int k){
   }
 
   if(current->left == nullptr && current->right == nullptr){
-    if(isLeft){
+    if(current == root){
+      root = nullptr;
+    }else if(isLeft){
       parent->left = nullptr;
       return true;
     }else{
@@ -163,38 +166,44 @@ bool BST::deleter(int k){
       return true;
     }
   }else if(current->left == nullptr){
-    if(isLeft){
+    if(current == root){
+      root = current->right;
+    }else if(isLeft){
+      parent->left = current->right;
       current->right = nullptr;
-      parent->left = nullptr;
       return true;
     }else{
+      parent->right = current->right;
       current->right = nullptr;
-      parent->right = nullptr;
       return true;
     }
-  }else if(current->right = nullptr){
-    if(isLeft){
+  }else if(current->right == nullptr){
+    if(current == root){
+      root = current->left;
+    }else if(isLeft){
+      parent->left = current->left;
       current->left = nullptr;
-      parent->left = nullptr;
       return true;
     }else{
+      parent->right = current->left;
       current->left = nullptr;
-      parent->right = nullptr;
       return true;
     }
-  }else{
-    TreeNode* successor = getSuccessor(current);
-    parent->left = successor;
-    successor = current->left;
   }
-
+}else{
+  TreeNode* successor = getSuccessor(current);
+  parent->left = successor;
+  successor = current->left;
+  return true;
 }
 
 TreeNode* BST::getSuccessor(TreeNode* d){
-  sp = successor;
-  successor = d->right;
+  TreeNode* sp = d;
+  TreeNode* successor = d;
+  // current =
   while(successor->left != nullptr){
     successor = successor->left;
+    break;
   }
 
   return successor;

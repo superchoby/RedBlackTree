@@ -191,7 +191,6 @@ bool BST::deleter(int k){
 		//find successor of the node to be deleted (current)
 		// cout << "whatup" << endl;
 		TreeNode* successor = getSuccessor(current);
-		// cout << successor->key << " key data" << endl;
 		if(current == root){
 			root = successor;
 		}else if(isLeft){
@@ -222,9 +221,6 @@ TreeNode* BST::getSuccessor(TreeNode *d){//d is the node to be deleted
 	}
 	return successor;
 }
-
-// TreeNode* getMin();
-// TreeNode* getMax();
 
 TreeNode* BST::getMin(){
 	TreeNode* current = root;
