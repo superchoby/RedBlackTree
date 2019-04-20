@@ -189,22 +189,35 @@ bool BST::deleter(int k){
       current->left = nullptr;
       return true;
     }
+  }else{
+    TreeNode* successor = getSuccessor(current);
+    if(current == root){
+      root = successor;
+    }else if(isLeft){
+      parent->left = successor;
+    }else{
+      parent->right = successor;
+    }
+    successor->left = current->left;
   }
-}else{
-  TreeNode* successor = getSuccessor(current);
-  parent->left = successor;
-  successor = current->left;
   return true;
 }
 
 TreeNode* BST::getSuccessor(TreeNode* d){
   TreeNode* sp = d;
   TreeNode* successor = d;
+  TreeNode* current = d;
   // current =
   while(successor->left != nullptr){
-    successor = successor->left;
-    break;
+    sp = successor;
+    successor = current;
+    current = current->left;
   }
-
+  // //check if successor descendant of right child
+  if(successor != d->right){
+    sp->left = successor->right;
+		successor->right = d->right;
+  }
   return successor;
+
 }

@@ -15,14 +15,14 @@ int main(){
   // tree->deleter(2);
   // tree->deleter(250);
   // tree->deleter(5);
-  tree->deleter(1);
+  // tree->deleter(1);
   // tree->deleter(7);
-  tree->deleter(3);
-  tree->deleter(25);
-  // tree->deleter(200);
-  tree->deleter(250);
-  tree->deleter(2);
-  tree->deleter(5);
+  // tree->deleter(3);
+  // tree->deleter(25);
+  tree->deleter(200);
+  // tree->deleter(250);
+  // tree->deleter(2);
+  // tree->deleter(5);
 
   tree->printTree();
   // tree->deleter(7);
