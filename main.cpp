@@ -1,8 +1,8 @@
-#include "PracticeBST.cpp"
+#include "RedBlackTree.cpp"
 // #include "BST.cpp"
 #include <iostream>
 int main(){
-  BST* tree = new BST();
+  RBT* tree = new RBT();
   tree->insert(5);
   tree->insert(3);
   tree->insert(7);

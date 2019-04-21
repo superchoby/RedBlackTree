@@ -1,5 +1,5 @@
 #include <iostream>
-
+#string "string"
 using namespace std;
 
 class TreeNode{
@@ -7,8 +7,13 @@ public:
   TreeNode();
   TreeNode(int d);
   ~TreeNode();
+  makeRed();
+  makeBlack();
+  isRed();
+  isBlack();
   TreeNode* left;
   TreeNode* right;
+  string color;
   int data;
 };
 
@@ -26,12 +31,29 @@ TreeNode::TreeNode(int d){
   left = nullptr;
   right = nullptr;
   data = d;
+  color = "black";
 }
 
-class BST{
+TreeNode::makeRed(){
+  color = "red";
+}
+
+TreeNode::makeBlack(){
+  color = "black";
+}
+
+TreeNode::isRed(){
+  return color == "red";
+}
+
+TreeNode::isBlack(){
+  return color == "black";
+}
+
+class RBT{
 public:
-  BST();
-  virtual ~BST();
+  RBT();
+  virtual ~RBT();
   void insert(int value);
   bool contains(int value); //AKA search
   // bool deleteNode(int value);
@@ -47,15 +69,15 @@ private:
   TreeNode* root;
 };
 
-BST::BST(){
+RBT::RBT(){
   root = nullptr;
 }
 
-BST::~BST(){
+RBT::~RBT(){
 
 }
 
-void BST::insert(int value){
+void RBT::insert(int value){
   if(root == nullptr){
     TreeNode* temp = new TreeNode(value);
     root = temp;
@@ -82,11 +104,11 @@ void BST::insert(int value){
   }
 }
 
-void BST::printTree(){
+void RBT::printTree(){
   recPrint(root);
 }
 
-void BST::recPrint(TreeNode* node){
+void RBT::recPrint(TreeNode* node){
   if(node == nullptr){
     return;
   }
@@ -95,7 +117,7 @@ void BST::recPrint(TreeNode* node){
   recPrint(node->right);
 }
 
-TreeNode* BST::getMin(){
+TreeNode* RBT::getMin(){
   TreeNode* current = root;
   TreeNode* parent = current;
   while(current != nullptr){
@@ -106,7 +128,7 @@ TreeNode* BST::getMin(){
   return parent;
 }
 
-TreeNode* BST::getMax(){
+TreeNode* RBT::getMax(){
   TreeNode* current = root;
   TreeNode* parent = current;
   while(current != nullptr){
@@ -117,7 +139,7 @@ TreeNode* BST::getMax(){
   return parent;
 }
 
-bool BST::contains(int value){
+bool RBT::contains(int value){
   TreeNode* current = root;
   while(true){
     if(current == nullptr){
@@ -134,7 +156,7 @@ bool BST::contains(int value){
   }
 }
 
-bool BST::deleter(int k){
+bool RBT::deleter(int k){
   TreeNode* current = root;
   TreeNode* parent = current;
   bool isLeft;
@@ -203,7 +225,7 @@ bool BST::deleter(int k){
   return true;
 }
 
-TreeNode* BST::getSuccessor(TreeNode* d){
+TreeNode* RBT::getSuccessor(TreeNode* d){
   TreeNode* sp = d;
   TreeNode* successor = d;
   TreeNode* current = d;
