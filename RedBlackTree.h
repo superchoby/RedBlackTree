@@ -119,55 +119,42 @@ void RBT::insert(int value){
     parent->right = temp;
   }
   temp->parent = parent;
-  cout << temp->data << " temp data" << endl;
   fixInsert(temp);
 }
 
 void RBT::fixInsert(TreeNode *&node){
-  while(true){
-    // if(root == node){
-    //   node->color = "black";
-    //   break;
-    // }
+  while(root != node){
+
     TreeNode *parent = node->parent;
     if(parent->parent == nullptr){
       break;
     }
     TreeNode *grandpa = parent->parent;
-    cout << parent->data << endl;
-    cout << grandpa->left->data << " left data" << endl;
-    cout << grandpa->right->data << " right daata" << endl;
-    // cout << node->data << " beginning" << endl;
     if(grandpa->left != nullptr && grandpa->right != nullptr){
       if(grandpa->left->color == 'r' && grandpa->right->color == 'r'){
-        // cout << "poop" << endl;
         grandpa->color = 'r';
-        // cout << "poop" << endl;
         grandpa->left->color = 'b';
-        // cout << "poop" << endl;
         grandpa->right->color = 'b';
-        // cout << "poop" << endl;
+        node = grandpa;
+        if(node != root){
+          parent = node->parent;
+          if(parent != root){
+            grandpa = parent->parent;
+          }
+        }else{
+          break;
+        }
       }
     }
-
-    cout << node->data << " beginning" << endl;
 
     if(parent->color == 'b'){
       break;
     }
 
-    cout << node->data << " end" << endl;
-
     TreeNode *greatGrandpa;
     bool grandpaIsLeftChild;
-    // cout << node->data << endl;
-    if(grandpa->left = parent){
-      cout << node->data << " you to the light" << endl;
-      cout << grandpa->data << " gpa data" << endl;
-      // cout << grandpa->left->data << " left data" << endl;
-      // cout << grandpa->right->data << " right daata" << endl;
-      // cout << "whatup cuh" << endl;
-      if(parent->left = node){
+    if(grandpa->left == parent){
+      if(parent->left == node){
         if(grandpa->parent != nullptr){
           greatGrandpa = grandpa->parent;
           if(greatGrandpa->left == grandpa){
@@ -191,15 +178,16 @@ void RBT::fixInsert(TreeNode *&node){
       }else{
         leftRotation(node, parent);
         grandpa->left = node;
+        node = parent;
       }
     }else{//grandpa rigth equal to parent
-      // cout << "whatup cuh" << endl;
-      cout << node->data << " i will guide" << endl;
-      if(parent->left = node){
+      // cout << node->data << " i will guide" << endl;
+      if(parent->left == node){
         rightRotation(node, parent);
         grandpa->right = node;
+        node = parent;
       }else{
-        // cout << "what up cuh" << endl;
+        cout << "please print right here" << endl;
         if(grandpa->parent != nullptr){
           greatGrandpa = grandpa->parent;
           if(greatGrandpa->left == grandpa){
@@ -222,17 +210,19 @@ void RBT::fixInsert(TreeNode *&node){
         }
       }
     }
-
   }
-
   root->color = 'b';
-
 }
 
 void RBT::rightRotation(TreeNode* child, TreeNode* parent){
   parent->left = nullptr;
   child->right = parent;
   if(parent->parent != nullptr){
+    if(parent->parent->left == parent){
+      parent->parent->left = child;
+    }else{
+      parent->parent->right = child;
+    }
     child->parent = parent->parent;
   }
   parent->parent = child;

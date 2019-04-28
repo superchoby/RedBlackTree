@@ -13,5 +13,5 @@ int main(){
   // tree->insert(250);
   // tree->deleter(200);
 
-  // tree->printTree();
+  tree->printTree();
 }
