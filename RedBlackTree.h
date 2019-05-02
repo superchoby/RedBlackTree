@@ -1,5 +1,8 @@
 #include <iostream>
 #include "string"
+#include <bits/stdc++.h>
+#include <queue>
+
 using namespace std;
 
 class TreeNode{
@@ -80,6 +83,9 @@ public:
   TreeNode* getMax();
   void printTree();
   void recPrint(TreeNode* node);
+  void traverse(TreeNode* root);
+  void levelOrder(TreeNode* root);
+  void levelOrderPrint();
 
 private:
   TreeNode* root;
@@ -91,6 +97,61 @@ RBT::RBT(){
 
 RBT::~RBT(){
 
+}
+
+void RBT::levelOrderPrint(){
+  levelOrder(root);
+}
+
+
+// A Binary Tree Node
+// Function to do level order
+// traversal line by line
+void RBT::levelOrder(TreeNode* root)
+{
+    if (root == NULL) return;
+
+    // Create an empty queue for
+    // level order tarversal
+    queue<TreeNode*> q;
+
+    // to store front element of
+    // queue.
+    TreeNode* curr;
+
+    // Enqueue Root and NULL node.
+    q.push(root);
+    q.push(NULL);
+
+    while (q.size() > 1)
+    {
+        curr = q.front();
+        q.pop();
+
+        // condition to check
+        // occurrence of next
+        // level.
+        if (curr == NULL)
+        {
+           q.push(NULL);
+           cout << "\n";
+        }
+
+        else {
+
+            // pushing left child of
+            // current node.
+            if(curr->left)
+            q.push(curr->left);
+
+            // pushing rigth child of
+            // current node.
+            if(curr->right)
+            q.push(curr->right);
+
+            cout << curr->data << " ";
+        }
+    }
 }
 
 void RBT::insert(int value){
@@ -187,7 +248,6 @@ void RBT::fixInsert(TreeNode *&node){
         grandpa->right = node;
         node = parent;
       }else{
-        cout << "please print right here" << endl;
         if(grandpa->parent != nullptr){
           greatGrandpa = grandpa->parent;
           if(greatGrandpa->left == grandpa){

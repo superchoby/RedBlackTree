@@ -57,6 +57,9 @@ BST::BST(){//default constructor
 	root = nullptr;
 }
 
+
+
+
 // BST()::~BST(){
 // 	//iterate and delete
 // 	//lets put on our research hats!!!!
