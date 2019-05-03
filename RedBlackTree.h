@@ -197,14 +197,7 @@ void RBT::fixInsert(TreeNode *&node){
         grandpa->left->color = 'b';
         grandpa->right->color = 'b';
         node = grandpa;
-        if(node != root){
-          parent = node->parent;
-          if(parent != root){
-            grandpa = parent->parent;
-          }
-        }else{
-          break;
-        }
+        continue;
       }
     }
 
@@ -247,7 +240,13 @@ void RBT::fixInsert(TreeNode *&node){
         rightRotation(node, parent);
         grandpa->right = node;
         node = parent;
-      }else{
+        // cout << node->data << " node data" << endl;
+        // cout << node->color << " node color" << endl;
+        // cout << node->parent->data << " parent data" << endl;
+        // cout << node->parent->color << " parent color" << endl;
+
+      }else{//parent right == node
+
         if(grandpa->parent != nullptr){
           greatGrandpa = grandpa->parent;
           if(greatGrandpa->left == grandpa){
@@ -258,7 +257,19 @@ void RBT::fixInsert(TreeNode *&node){
         }else{
           greatGrandpa = nullptr;
         }
+
+
+
+        // levelOrderPrint();
+        // cout << "steve" << endl;
+        // cout << "steve" << endl;
+        // cout << "steve" << endl;
         leftRotation(parent, grandpa);
+        // levelOrderPrint();
+        // cout << "asif" << endl;
+        // cout << "asif" << endl;
+        // cout << "asif" << endl;
+
         parent->switchColor();
         grandpa->switchColor();
         if(greatGrandpa != nullptr){
@@ -268,6 +279,13 @@ void RBT::fixInsert(TreeNode *&node){
             greatGrandpa->right = parent;
           }
         }
+
+
+
+        node = parent;
+        //this is a maybe
+
+
       }
     }
   }
@@ -275,7 +293,9 @@ void RBT::fixInsert(TreeNode *&node){
 }
 
 void RBT::rightRotation(TreeNode* child, TreeNode* parent){
-  parent->left = nullptr;
+
+  parent->left = child->right;
+  child->right->parent = parent;
   child->right = parent;
   if(parent->parent != nullptr){
     if(parent->parent->left == parent){
@@ -289,11 +309,13 @@ void RBT::rightRotation(TreeNode* child, TreeNode* parent){
 }
 
 void RBT::leftRotation(TreeNode* child, TreeNode* parent){
-  parent->right = nullptr;
+  parent->right = child->left;
+  child->left->parent = parent;
   child->left = parent;
   if(parent->parent != nullptr){
     child->parent = parent->parent;
   }
+  child->parent == nullptr;
   parent->parent = child;
 }
 
