@@ -82,6 +82,7 @@ public:
   TreeNode* getMin();
   TreeNode* getMax();
   void printTree();
+  void redBlackTreeDelete(int k);
   void recPrint(TreeNode* node);
   void traverse(TreeNode* root);
   void levelOrder(TreeNode* root);
@@ -110,27 +111,14 @@ void RBT::levelOrderPrint(){
 void RBT::levelOrder(TreeNode* root)
 {
     if (root == NULL) return;
-
-    // Create an empty queue for
-    // level order tarversal
     queue<TreeNode*> q;
-
-    // to store front element of
-    // queue.
     TreeNode* curr;
-
-    // Enqueue Root and NULL node.
     q.push(root);
     q.push(NULL);
-
     while (q.size() > 1)
     {
         curr = q.front();
         q.pop();
-
-        // condition to check
-        // occurrence of next
-        // level.
         if (curr == NULL)
         {
            q.push(NULL);
@@ -138,23 +126,18 @@ void RBT::levelOrder(TreeNode* root)
         }
 
         else {
-
-            // pushing left child of
-            // current node.
             if(curr->left)
             q.push(curr->left);
-
-            // pushing rigth child of
-            // current node.
             if(curr->right)
             q.push(curr->right);
-
+            // cout << curr->color << " ";
             cout << curr->data << " ";
         }
     }
 }
 
 void RBT::insert(int value){
+
   if(root == nullptr){
     TreeNode* temp = new TreeNode(value);
     root = temp;
@@ -180,6 +163,7 @@ void RBT::insert(int value){
     parent->right = temp;
   }
   temp->parent = parent;
+
   fixInsert(temp);
 }
 
@@ -191,6 +175,7 @@ void RBT::fixInsert(TreeNode *&node){
       break;
     }
     TreeNode *grandpa = parent->parent;
+
     if(grandpa->left != nullptr && grandpa->right != nullptr){
       if(grandpa->left->color == 'r' && grandpa->right->color == 'r'){
         grandpa->color = 'r';
@@ -200,13 +185,14 @@ void RBT::fixInsert(TreeNode *&node){
         continue;
       }
     }
-
     if(parent->color == 'b'){
       break;
+    }else if(node->color == 'b' && parent->color == 'r' && grandpa->color == 'b'){
+      break;
     }
-
     TreeNode *greatGrandpa;
     bool grandpaIsLeftChild;
+
     if(grandpa->left == parent){
       if(parent->left == node){
         if(grandpa->parent != nullptr){
@@ -219,6 +205,7 @@ void RBT::fixInsert(TreeNode *&node){
         }else{
           greatGrandpa = nullptr;
         }
+
         rightRotation(parent, grandpa);
         parent->switchColor();
         grandpa->switchColor();
@@ -232,21 +219,14 @@ void RBT::fixInsert(TreeNode *&node){
       }else{
         leftRotation(node, parent);
         grandpa->left = node;
-        node = parent;
       }
+      node = parent;
+
     }else{//grandpa rigth equal to parent
-      // cout << node->data << " i will guide" << endl;
       if(parent->left == node){
         rightRotation(node, parent);
         grandpa->right = node;
-        node = parent;
-        // cout << node->data << " node data" << endl;
-        // cout << node->color << " node color" << endl;
-        // cout << node->parent->data << " parent data" << endl;
-        // cout << node->parent->color << " parent color" << endl;
-
       }else{//parent right == node
-
         if(grandpa->parent != nullptr){
           greatGrandpa = grandpa->parent;
           if(greatGrandpa->left == grandpa){
@@ -257,19 +237,7 @@ void RBT::fixInsert(TreeNode *&node){
         }else{
           greatGrandpa = nullptr;
         }
-
-
-
-        // levelOrderPrint();
-        // cout << "steve" << endl;
-        // cout << "steve" << endl;
-        // cout << "steve" << endl;
         leftRotation(parent, grandpa);
-        // levelOrderPrint();
-        // cout << "asif" << endl;
-        // cout << "asif" << endl;
-        // cout << "asif" << endl;
-
         parent->switchColor();
         grandpa->switchColor();
         if(greatGrandpa != nullptr){
@@ -279,23 +247,20 @@ void RBT::fixInsert(TreeNode *&node){
             greatGrandpa->right = parent;
           }
         }
-
-
-
-        node = parent;
-        //this is a maybe
-
-
       }
+      node = parent;
     }
   }
   root->color = 'b';
 }
 
 void RBT::rightRotation(TreeNode* child, TreeNode* parent){
-
-  parent->left = child->right;
-  child->right->parent = parent;
+  if(child->right != nullptr){
+    parent->left = child->right;
+    child->right->parent = parent;
+  }else{
+    parent->left = nullptr;
+  }
   child->right = parent;
   if(parent->parent != nullptr){
     if(parent->parent->left == parent){
@@ -304,19 +269,35 @@ void RBT::rightRotation(TreeNode* child, TreeNode* parent){
       parent->parent->right = child;
     }
     child->parent = parent->parent;
+  }else{
+    child->parent = nullptr;
+    root = child;
   }
   parent->parent = child;
 }
 
 void RBT::leftRotation(TreeNode* child, TreeNode* parent){
-  parent->right = child->left;
-  child->left->parent = parent;
+  if(child->left != nullptr){
+    parent->right = child->left;
+    child->left->parent = parent;
+  }else{
+    parent->right = nullptr;
+  }
+
   child->left = parent;
   if(parent->parent != nullptr){
+    if(parent->parent->left == parent){
+      parent->parent->left = child;
+    }else{
+      parent->parent->right = child;
+    }
     child->parent = parent->parent;
+  }else{
+    child->parent = nullptr;
+    root = child;
   }
-  child->parent == nullptr;
   parent->parent = child;
+
 }
 
 void RBT::printTree(){
@@ -371,6 +352,79 @@ bool RBT::contains(int value){
   }
 }
 
+void RBT::redBlackTreeDelete(int k){
+  TreeNode* current = root;
+  TreeNode* parent = current;
+  bool isLeft;
+  while(true){
+    if(current == nullptr){
+      return;
+    }
+    if(k == current->data){
+      break;
+    }
+    parent = current;
+    if(k < current->data){
+      current = current->left;
+      isLeft = true;
+    }else{
+      current = current->right;
+      isLeft = false;
+    }
+  }
+
+
+  if(current->left == nullptr && current->right == nullptr && current->color == 'r'){
+    root = nullptr;
+    return;
+  }
+
+
+  if(current->left == nullptr && current->right == nullptr && current->color == 'r'){
+    if(parent->left == current){
+      parent->left = nullptr;
+    }if(parent->right == current){
+      parent->right = nullptr;
+    }
+  }
+
+  if(current->left == nullptr && current->right == nullptr && current->color == 'b' && current != root){
+    if(parent->left == current){
+      parent->left = nullptr;
+      if(parent->right != nullptr){
+        if(parent->right->right == nullptr && parent->right->left==nullptr){
+          parent->right->switchColor();
+        }else if(parent->right->right != nullptr){//right nephew is red
+          parent->parent->switchColor();
+          parent->parent->right->switchColor();
+          leftRotation(parent->right, parent);
+        }else{//right newphew does not exist and left does
+          parent->right->left->switchColor();
+          parent->right->switchColor();
+          rightRotation(parent->right->left, parent->right);
+        }
+      }//parent->left cant be nullptr cuz it current
+    }if(parent->right == current){
+      parent->right = nullptr;
+      if(parent->left != nullptr){
+        if(parent->left->left == nullptr && parent->left->right==nullptr){
+          parent->left->switchColor();
+        }else if(parent->left->left != nullptr){//right nephew is red
+          parent->parent->switchColor();
+          parent->parent->left->switchColor();
+          leftRotation(parent->left, parent);
+        }else{//right newphew does not exist and left does
+          parent->left->right->switchColor();
+          parent->left->switchColor();
+          rightRotation(parent->left->right, parent->left);
+        }
+      }
+    }
+  }
+  root->color = 'b';
+}
+
+
 bool RBT::deleter(int k){
   TreeNode* current = root;
   TreeNode* parent = current;
@@ -397,9 +451,17 @@ bool RBT::deleter(int k){
       root = nullptr;
     }else if(isLeft){
       parent->left = nullptr;
+      if(parent->color == 'r' && parent->right != nullptr){
+        parent->switchColor();
+        parent->right->switchColor();
+      }
       return true;
     }else{
       parent->right = nullptr;
+      if(parent->color == 'r' && parent->left != nullptr){
+        parent->switchColor();
+        parent->left->switchColor();
+      }
       return true;
     }
   }else if(current->left == nullptr){
