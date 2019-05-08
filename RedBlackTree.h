@@ -15,7 +15,7 @@ public:
   TreeNode* left;
   TreeNode* right;
   TreeNode* parent;
-  bool pointsToDoubleBlack;
+  bool isDoubleBlack;
   bool isNULL;
   char color;
   int data;
@@ -27,7 +27,7 @@ TreeNode::TreeNode(){
   right = nullptr;
   color = 'b';
   parent = nullptr;
-  pointsToDoubleBlack = false;
+  isDoubleBlack = false;
   isNULL = true;
 }
 
@@ -59,7 +59,7 @@ TreeNode::TreeNode(int d){
   parent = nullptr;
   data = d;
   color = 'r';
-  pointsToDoubleBlack = false;
+  isDoubleBlack = false;
   isNULL = false;
 }
 
@@ -383,88 +383,118 @@ void RBT::redBlackTreeDelete(int k){
       isLeft = false;
     }
   }
-  TreeNode* sibling;
-  TreeNode* leftNephew;
-  TreeNode* rightNewphew;
-  TreeNode* leftChild;
-  TreeNode* rightChild;
+
 
   if(isLeft){
-    sibling = parent->right;
-  }else{
-    sibling = parent->left;
-  }
-
-  if(sibling->right != nullptr){
-    rightNephew = sibling->right;
-  }else{
-    rightNephew = new Node();
-  }
-
-  if(sibling->left != nullptr){
-    leftNephew = sibling->left;
-  }else{
-    leftNephew = new Node();
-  }
-
-  if(current->left != nullptr){
-    leftChild = current->left;
-  }else{
-    leftChild = new Node();
-  }
-
-  if(current->right != nullptr){
-    rightChild = current->right;
-  }else{
-    rightChild = new Node();
-  }
-
-  if(isLeft){
-    parent->left = nullptr;
-    if(current->isRed()){
+    TreeNode* successor = getSuccessor(current);
+    swapValue(current, successor);
+    if(successor->color == 'r'){
+      deleter(successor);
       return;
-    }else{//is black
-      if(current->left->color == 'r'){
-        TreeNode* successor = getSuccessor(current);
-        swapValue(current, successor);
-        if(successor == successor->parent->left){
-          successor->parent->left = nullptr;
+    }else{
+      deleter(successor);
+      successor = new Node();
+      successor->pointsToDoubleBlack = true;
+    }
+      // if(successor == successor->parent->left){
+      //   successor->parent->left = nullptr;
+      // }else{
+      //   successor->parent->right = nullptr;
+      // }
+      // parent->pointsToDoubleBlack = true;
+      // while(parent->pointsToDoubleBlack){
+      //   if(rightNephew->isRed()){
+      //     leftRotation(sibling, parent);
+      //     rightNephew->switchColor();
+      //     parent->pointsToDoubleBlack = false;
+      //   }else if(leftNephew->isRed()){
+      //     rightRotation
+      //   }
+      // }
+    TreeNode* sibling;
+    TreeNode* leftNephew;
+    TreeNode* rightNewphew;
+    TreeNode* leftChild;
+    TreeNode* rightChild;
+    TreeNode* doubleBlackNode = nullptr;
+
+    if(isLeft){
+      sibling = successor->parent->right;
+    }else{
+      sibling = successor->parent->left;
+    }
+
+    if(sibling->right != nullptr){
+      rightNephew = sibling->right;
+    }else{
+      rightNephew = new Node();
+    }
+
+    if(sibling->left != nullptr){
+      leftNephew = sibling->left;
+    }else{
+      leftNephew = new Node();
+    }
+
+    if(successor->left != nullptr){
+      leftChild = successor->left;
+    }else{
+      leftChild = nullptr;
+    }
+
+    if(successor->right != nullptr){
+      rightChild = successor->right;
+    }else{
+      rightChild = nullptr;
+    }
+
+    if(current->isRed() && rightChild==nullptr && leftChild == nullptr){
+      parent->left = nullptr;
+      return;
+    }
+
+    if(successor->pointsToDoubleBlack){
+      if(sibling != nullptr){
+        if(sibling->color == 'r'){
+          if(successor == parent->right){
+            rightRotation(sibling, parent);
+            sibling->switchColor();
+            parent->switchColor();
+          }else{
+            leftRotation(sibling, parent);
+            sibling->switchColor();
+            parent->switchColor();
+          }
         }else{
-          successor->parent->right = nullptr;
+          if(nodeWithDoubleBlack == parent->right){
+            
+          }else{// equals parent's left
+            if(successor->rightNephew != nullptr){
+              if(successor->rightNephew == 'r'){
+
+              }
+            }else if(successor->leftNephew != nullptr){
+              if(successor->leftNephew->color == 'r'){
+                rightRotation(sibling, leftNephew);
+                sibling->switchColor();
+                leftNephew->switchColor();
+                leftRotation->(successor->parent, leftNephew);
+                switchColor(successor->parent);
+                switchColor(leftNephew);
+                switchColor(sibling);
+              }//need to do if black
+            }
+          }
         }
       }
-
-
-
-
-
-
-
-
-
-
-
-      parent->pointsToDoubleBlack = true;
-      while(parent->pointsToDoubleBlack){
-        if(rightNephew->isRed()){
-          leftRotation(sibling, parent);
-          rightNephew->switchColor();
-          parent->pointsToDoubleBlack = false;
-        }else if(leftNephew->isRed()){
-          rightRotation
-        }
-      }
-
-
-
     }
-  }else{
-    if(current->isRed()){
-      parent->right = nullptr;
-    }
-  }
+  // }else{
+  //   if(current->isRed()){
+  //     parent->right = nullptr;
+  //   }
+  // }
 
-}
+}// OMG i still need to do right
 
 
 // void RBT::redBlackTreeDelete(int k){
