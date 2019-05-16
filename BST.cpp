@@ -46,6 +46,9 @@ class BST{
 		TreeNode* getMax();
 		void printTree();
 		bool isEmpty();
+		void preOrder(TreeNode* root);
+		void postOrder(TreeNode* root);
+		void inOrder(TreeNode* root);
 		void recPrint(TreeNode* node);
 
 	private:
@@ -66,9 +69,33 @@ BST::BST(){//default constructor
 // }
 
 void BST::printTree(){//print entire tree
-	recPrint(root);
+	preOrder(root);
 }
 
+void BST::preOrder(TreeNode* root){
+  if(root == nullptr){
+    return;
+  }
+  cout << root->key << endl;
+  preOrder(root->left);
+  preOrder(root->right);
+}
+void BST::postOrder(TreeNode* root){
+	if(root == nullptr){
+    return;
+  }
+  postOrder(root->left);
+  postOrder(root->right);
+	cout << root->key << endl;
+}
+void BST::inOrder(TreeNode* root){
+	if(root == nullptr){
+    return;
+  }
+  Inorder(root->left);
+	cout << root->key << endl;
+  Inorder(root->right);
+}
 void BST::recPrint(TreeNode* node){
 	if(node == nullptr){
 		return;
