@@ -28,18 +28,6 @@ int main(){
   tree->deleter(25);
   tree->deleter(40);
   tree->deleter(10);
-
-
-
-
-
-
-
-
-
-
-  //
-  //
   tree->insert(20);
   tree->insert(10);
   tree->insert(25);
@@ -48,17 +36,6 @@ int main(){
   tree->insert(98);
   tree->deleter(20);
   tree->deleter(67);
-
-
-
-
-
-
-
-
-
-
-
 
   tree->insert(234);
 

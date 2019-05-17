@@ -106,11 +106,13 @@ private:
   TreeNode<T>* root;
 };
 
+//prints the tree preorder
 template <class T>
 void RBT<T>::printTree(){//print entire tree
 	preOrder(root);
 }
 
+//used by printtree function to print
 template <class T>
 void RBT<T>::preOrder(TreeNode<T>* root){
   if(root == nullptr){
@@ -121,16 +123,19 @@ void RBT<T>::preOrder(TreeNode<T>* root){
   preOrder(root->right);
 }
 
+//default construcotr
 template <class T>
 RBT<T>::RBT(){
   root = nullptr;
 }
 
+//desturcotr
 template <class T>
 RBT<T>::~RBT(){
   recursiveDelete(root);
 }
 
+//recursive deleter for tree
 template <class T>
 void RBT<T>::recursiveDelete(TreeNode<T>* root){
   if(root != nullptr){
@@ -140,6 +145,7 @@ void RBT<T>::recursiveDelete(TreeNode<T>* root){
   }
 }
 
+//swithces value of two nodes
 template <class T>
 void RBT<T>::swapValue(TreeNode<T> *node1, TreeNode<T> *node2){
   T tempValue1 = node1->data;
@@ -147,6 +153,7 @@ void RBT<T>::swapValue(TreeNode<T> *node1, TreeNode<T> *node2){
   node2->data = tempValue1;
 }
 
+//inserts a node
 template <class T>
 void RBT<T>::insert(T value){
 
@@ -179,6 +186,7 @@ void RBT<T>::insert(T value){
   fixInsert(temp);
 }
 
+//used to fix the issues iwth insert
 template <class T>
 void RBT<T>::fixInsert(TreeNode<T> *&node){
   while(root != node){
@@ -270,6 +278,7 @@ void RBT<T>::fixInsert(TreeNode<T> *&node){
   root->color = 'b';
 }
 
+//rotates two nodes ot the right
 template <class T>
 void RBT<T>::rightRotation(TreeNode<T>* child, TreeNode<T>* parent){
   if(child->right != nullptr){
@@ -293,6 +302,7 @@ void RBT<T>::rightRotation(TreeNode<T>* child, TreeNode<T>* parent){
   parent->parent = child;
 }
 
+//rotates two nodes to the left
 template <class T>
 void RBT<T>::leftRotation(TreeNode<T>* child, TreeNode<T>* parent){
   if(child->left != nullptr){
@@ -318,8 +328,7 @@ void RBT<T>::leftRotation(TreeNode<T>* child, TreeNode<T>* parent){
 
 }
 
-
-
+//gets the minimum value in the tree
 template <class T>
 TreeNode<T>* RBT<T>::getMin(){
   TreeNode<T>* current = root;
@@ -332,6 +341,7 @@ TreeNode<T>* RBT<T>::getMin(){
   return parent;
 }
 
+//gets the max value
 template <class T>
 TreeNode<T>* RBT<T>::getMax(){
   TreeNode<T>* current = root;
@@ -344,6 +354,7 @@ TreeNode<T>* RBT<T>::getMax(){
   return parent;
 }
 
+//sees if the tree contains a value
 template <class T>
 bool RBT<T>::contains(T value){
   TreeNode<T>* current = root;
@@ -362,6 +373,7 @@ bool RBT<T>::contains(T value){
   }
 }
 
+//deletes a value in the tree
 template <class T>
 bool RBT<T>::deleter(T k){
   TreeNode<T>* current = root;
@@ -460,6 +472,7 @@ bool RBT<T>::deleter(T k){
 
 }
 
+//gest the largest node in the left subtree
 template <class T>
 TreeNode<T>* RBT<T>::getSuccessor(TreeNode<T>* d){
   TreeNode<T>* successor = d->left;
@@ -469,6 +482,7 @@ TreeNode<T>* RBT<T>::getSuccessor(TreeNode<T>* d){
   return successor;
 }
 
+//fixes double black issue when black node deleted
 template <class T>
 void RBT<T>::fixDoubleBlack(TreeNode<T>* node, bool isLeft){
 
@@ -624,8 +638,5 @@ void RBT<T>::fixDoubleBlack(TreeNode<T>* node, bool isLeft){
     }else{// does equal nullptr
       node->color = 'b';
     }
-
-
-
   }
 }
