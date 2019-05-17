@@ -1,7 +1,5 @@
 #include <iostream>
 #include "string"
-#include <bits/stdc++.h>
-#include <queue>
 
 using namespace std;
 
@@ -99,8 +97,6 @@ public:
   void redBlackTreeDelete(T k);
   void recPrint(TreeNode<T>* node);
   void traverse(TreeNode<T>* root);
-  void levelOrder(TreeNode<T>* root);
-  void levelOrderPrint();
   void fixDoubleBlack(TreeNode<T>* node, bool isLeft);
   void printTree();
   void preOrder(TreeNode<T>* root);
@@ -145,48 +141,10 @@ void RBT<T>::recursiveDelete(TreeNode<T>* root){
 }
 
 template <class T>
-void RBT<T>::levelOrderPrint(){
-  levelOrder(root);
-}
-
-template <class T>
 void RBT<T>::swapValue(TreeNode<T> *node1, TreeNode<T> *node2){
   T tempValue1 = node1->data;
   node1->data = node2->data;
   node2->data = tempValue1;
-}
-// A Binary Tree Node
-// Function to do level order
-// traversal line by line
-template <class T>
-void RBT<T>::levelOrder(TreeNode<T>* root)
-{
-    if (root == NULL) return;
-    queue<TreeNode<T>*> q;
-    TreeNode<T>* curr;
-    q.push(root);
-    q.push(NULL);
-    while (q.size() > 1)
-    {
-        curr = q.front();
-        q.pop();
-        if (curr == NULL)
-        {
-           q.push(NULL);
-           cout << "\n";
-        }
-
-        else {
-            if(curr->left)
-            q.push(curr->left);
-            if(curr->right)
-            q.push(curr->right);
-            cout << curr->data << " ";
-            cout << curr->color << " ";
-        }
-
-    }
-    cout << endl;
 }
 
 template <class T>

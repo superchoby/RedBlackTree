@@ -65,6 +65,4 @@ int main(){
   //
   //
   tree->printTree();
-
-  tree->levelOrderPrint();
 }
