@@ -2,7 +2,7 @@
 // #include "BST.cpp"
 #include <iostream>
 int main(){
-  RBT* tree = new RBT();
+  RBT<int>* tree = new RBT<int>();
 
 
   tree->insert(30);
@@ -28,6 +28,8 @@ int main(){
   tree->deleter(25);
   tree->deleter(40);
   tree->deleter(10);
+
+
 
   tree->insert(20);
   tree->insert(10);
