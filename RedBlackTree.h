@@ -144,7 +144,9 @@ void RBT::levelOrder(TreeNode* root)
             cout << curr->data << " ";
             cout << curr->color << " ";
         }
+
     }
+    cout << endl;
 }
 
 void RBT::insert(int value){
@@ -188,7 +190,7 @@ void RBT::fixInsert(TreeNode *&node){
     TreeNode *grandpa = parent->parent;
 
     if(grandpa->left != nullptr && grandpa->right != nullptr){
-      if(grandpa->left->color == 'r' && grandpa->right->color == 'r'){
+      if(grandpa->left->color == 'r' && grandpa->right->color == 'r' && node->color == 'r'){
         grandpa->color = 'r';
         grandpa->left->color = 'b';
         grandpa->right->color = 'b';
@@ -196,6 +198,7 @@ void RBT::fixInsert(TreeNode *&node){
         continue;
       }
     }
+
     if(parent->color == 'b'){
       break;
     }else if(node->color == 'b' && parent->color == 'r' && grandpa->color == 'b'){
@@ -259,7 +262,9 @@ void RBT::fixInsert(TreeNode *&node){
           }
         }
       }
+
       node = parent;
+
     }
   }
   root->color = 'b';
@@ -359,7 +364,7 @@ bool RBT::deleter(int k){
   bool isLeft;//checks if node is a left or right child
   while(true){
     if(current == nullptr){
-      return true;
+      return false;
     }
     if(k == current->data){
       break;
@@ -380,12 +385,13 @@ bool RBT::deleter(int k){
     TreeNode* successorParent = nodeToDelete->parent;
     swapValue(current, nodeToDelete);
     if(nodeToDelete->color == 'r'){
-      if(successorParent->left == nodeToDelete->parent){
+      if(successorParent->left == nodeToDelete){
         successorParent->left = nullptr;
       }else{
         successorParent->right = nullptr;
       }
       nodeToDelete->parent == nullptr;
+      return true;
     }else{
       if(nodeToDelete->left == nullptr){
         if(successorParent == current){
@@ -397,6 +403,10 @@ bool RBT::deleter(int k){
           successorParent->right = nullptr;
           leftIsDoubleBlack = false;
         }
+      }else{
+        successorParent->left = nodeToDelete->left;
+        nodeToDelete->left->parent = successorParent;
+        successorParent = successorParent->left;
       }
       // if(successorParent->left == nodeToDelete->parent){
       //   successorParent->left = nullptr;
@@ -411,9 +421,9 @@ bool RBT::deleter(int k){
   }else{
     nodeToDelete = current;
     if(nodeToDelete->color == 'r'){
-      if(parent->left == nodeToDelete->parent){
+      if(parent->left == nodeToDelete){
         parent->left = nullptr;
-      }else{
+      }else if(parent->right == nodeToDelete){
         parent->right = nullptr;
       }
       nodeToDelete->parent == nullptr;
@@ -464,11 +474,10 @@ TreeNode* RBT::getSuccessor(TreeNode* d){
 
 void RBT::fixDoubleBlack(TreeNode* node, bool isLeft){
   if(isLeft){
-    cout << "aaaaaa" << endl;
     if(node->right != nullptr){
 
       if(node->right->color == 'r'){
-        leftRotation(node, node->right);
+        leftRotation(node->right, node);
         node->switchColor();
         node->right->switchColor();
         fixDoubleBlack(node, isLeft);
@@ -500,14 +509,14 @@ void RBT::fixDoubleBlack(TreeNode* node, bool isLeft){
         }
 
         if(rightNephewIsRed){
-          leftRotation(node, node->right);
+          leftRotation(node->right, node);
           node->switchColor();
           node->right->switchColor();
           if(node->right->right != nullptr){
             node->right->right->switchColor();
           }
         }else if(leftNephewIsRed){
-          rightRotation(node->right, node->right->left);
+          rightRotation(node->right->left, node->right);
           node->right->switchColor();
           node->left->switchColor();
           fixDoubleBlack(node, isLeft);
@@ -536,12 +545,9 @@ void RBT::fixDoubleBlack(TreeNode* node, bool isLeft){
       node->color = 'b';
     }
 
-  }else{
-
-    if(node->left != nullptr/* && node->left->left == nullptr && node->left->right == nullptr*/){
-
+  }else{//is right
+    if(node->left != nullptr){
       if(node->left->color == 'r'){
-
         leftRotation(node, node->left);
         node->switchColor();
         node->left->switchColor();
@@ -578,13 +584,6 @@ void RBT::fixDoubleBlack(TreeNode* node, bool isLeft){
 
 
         if(leftNephewIsRed){
-          // cout << "asd" << endl;
-          // levelOrderPrint();
-          // cout << endl;
-          // cout << node->data << " data" << endl;
-          // // cout << rightNephewIsRed << " right red" << endl;
-          // // cout << leftNephewIsRed << " left red" << endl;
-          // cout << "asd" << endl;
 
           rightRotation(node->left, node);
           if(node->color == 'r'){
@@ -602,6 +601,14 @@ void RBT::fixDoubleBlack(TreeNode* node, bool isLeft){
           if(node->left->left != nullptr){
             node->left->left->switchColor();
           }
+          // cout << "asd" << endl;
+          // levelOrderPrint();
+          // cout << endl;
+          // cout << node->data << " data" << endl;
+          // // cout << rightNephewIsRed << " right red" << endl;
+          // // cout << leftNephewIsRed << " left red" << endl;
+          // cout << "asd" << endl;
+
           fixDoubleBlack(node, isLeft);
         }else{//left and right nephew are black
           if(node->color == 'r'){
