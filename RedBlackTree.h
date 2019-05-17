@@ -5,10 +5,11 @@
 
 using namespace std;
 
+template <class T>
 class TreeNode{
 public:
   TreeNode();
-  TreeNode(int d);
+  TreeNode(T d);
   ~TreeNode();
   bool isRed();
   bool isBlack();
@@ -18,11 +19,12 @@ public:
   bool isDoubleBlack;
   bool isNULL;
   char color;
-  int data;
+  T data;
   void switchColor();
 };
 
-TreeNode::TreeNode(){
+template <class T>
+TreeNode<T>::TreeNode(){
   left = nullptr;
   right = nullptr;
   color = 'b';
@@ -31,7 +33,8 @@ TreeNode::TreeNode(){
   isNULL = true;
 }
 
-void TreeNode::switchColor(){
+template <class T>
+void TreeNode<T>::switchColor(){
   if(color == 'b'){
     color = 'r';
   }else{
@@ -39,7 +42,8 @@ void TreeNode::switchColor(){
   }
 }
 
-TreeNode::~TreeNode(){
+template <class T>
+TreeNode<T>::~TreeNode(){
   // delete left;
   // delete right;
   if(left != nullptr){
@@ -53,7 +57,8 @@ TreeNode::~TreeNode(){
   	}
 }
 
-TreeNode::TreeNode(int d){
+template <class T>
+TreeNode<T>::TreeNode(T d){
   left = nullptr;
   right = nullptr;
   parent = nullptr;
@@ -63,49 +68,55 @@ TreeNode::TreeNode(int d){
   isNULL = false;
 }
 
-bool TreeNode::isRed(){
+template <class T>
+bool TreeNode<T>::isRed(){
   return color == 'r';
 }
 
-bool TreeNode::isBlack(){
+template <class T>
+bool TreeNode<T>::isBlack(){
   return color == 'b';
 }
 
+template <class T>
 class RBT{
 public:
   RBT();
   virtual ~RBT();
-  void insert(int value);
-  bool contains(int value); //AKA search
+  void insert(T value);
+  bool contains(T value); //AKA search
   // bool deleteNode(int value);
-  TreeNode* getSuccessor(TreeNode* d);
+  TreeNode<T>* getSuccessor(TreeNode<T>* d);
   // bool deleteRec();
-  bool deleter(int k);
-  void rightRotation(TreeNode* child, TreeNode* parent);
-  void leftRotation(TreeNode* child, TreeNode* parent);
-  void fixInsert(TreeNode *&node);
-  void switchColors(TreeNode *node1, TreeNode *node2);
-  TreeNode* getMin();
-  TreeNode* getMax();
-  void swapValue(TreeNode *node1, TreeNode *node2);
-  void redBlackTreeDelete(int k);
-  void recPrint(TreeNode* node);
-  void traverse(TreeNode* root);
-  void levelOrder(TreeNode* root);
+  bool deleter(T k);
+  void rightRotation(TreeNode<T>* child, TreeNode<T>* parent);
+  void leftRotation(TreeNode<T>* child, TreeNode<T>* parent);
+  void fixInsert(TreeNode<T> *&node);
+  void switchColors(TreeNode<T> *node1, TreeNode<T> *node2);
+  TreeNode<T>* getMin();
+  TreeNode<T>* getMax();
+  void swapValue(TreeNode<T> *node1, TreeNode<T> *node2);
+  void redBlackTreeDelete(T k);
+  void recPrint(TreeNode<T>* node);
+  void traverse(TreeNode<T>* root);
+  void levelOrder(TreeNode<T>* root);
   void levelOrderPrint();
-  void fixDoubleBlack(TreeNode* node, bool isLeft);
+  void fixDoubleBlack(TreeNode<T>* node, bool isLeft);
   void printTree();
-  void preOrder(TreeNode* root);
+  void preOrder(TreeNode<T>* root);
+  void recursiveDelete(TreeNode<T>* root);
 
 private:
-  TreeNode* root;
+  TreeNode<T>* root;
 };
 
-void RBT::printTree(){//print entire tree
+template <class T>
+void RBT<T>::printTree(){//print entire tree
 	preOrder(root);
 }
 
-void RBT::preOrder(TreeNode* root){
+template <class T>
+void RBT<T>::preOrder(TreeNode<T>* root){
   if(root == nullptr){
     return;
   }
@@ -114,31 +125,45 @@ void RBT::preOrder(TreeNode* root){
   preOrder(root->right);
 }
 
-RBT::RBT(){
+template <class T>
+RBT<T>::RBT(){
   root = nullptr;
 }
 
-RBT::~RBT(){
-
+template <class T>
+RBT<T>::~RBT(){
+  recursiveDelete(root);
 }
 
-void RBT::levelOrderPrint(){
+template <class T>
+void RBT<T>::recursiveDelete(TreeNode<T>* root){
+  if(root != nullptr){
+    recursiveDelete(root->left);
+    recursiveDelete(root->right);
+    delete root;
+  }
+}
+
+template <class T>
+void RBT<T>::levelOrderPrint(){
   levelOrder(root);
 }
 
-void RBT::swapValue(TreeNode *node1, TreeNode *node2){
-  int tempValue1 = node1->data;
+template <class T>
+void RBT<T>::swapValue(TreeNode<T> *node1, TreeNode<T> *node2){
+  T tempValue1 = node1->data;
   node1->data = node2->data;
   node2->data = tempValue1;
 }
 // A Binary Tree Node
 // Function to do level order
 // traversal line by line
-void RBT::levelOrder(TreeNode* root)
+template <class T>
+void RBT<T>::levelOrder(TreeNode<T>* root)
 {
     if (root == NULL) return;
-    queue<TreeNode*> q;
-    TreeNode* curr;
+    queue<TreeNode<T>*> q;
+    TreeNode<T>* curr;
     q.push(root);
     q.push(NULL);
     while (q.size() > 1)
@@ -164,16 +189,17 @@ void RBT::levelOrder(TreeNode* root)
     cout << endl;
 }
 
-void RBT::insert(int value){
+template <class T>
+void RBT<T>::insert(T value){
 
   if(root == nullptr){
-    TreeNode* temp = new TreeNode(value);
+    TreeNode<T>* temp = new TreeNode<T>(value);
     root = temp;
     return;
   }
   bool isLeft;
-  TreeNode* current = root;
-  TreeNode* parent = current;
+  TreeNode<T>* current = root;
+  TreeNode<T>* parent = current;
   while(current != nullptr){
     parent = current;
     if(value < current->data){
@@ -184,7 +210,7 @@ void RBT::insert(int value){
       isLeft = false;
     }
   }
-  TreeNode* temp = new TreeNode(value);
+  TreeNode<T>* temp = new TreeNode<T>(value);
   if(isLeft){
     parent->left = temp;
   }else{
@@ -195,14 +221,15 @@ void RBT::insert(int value){
   fixInsert(temp);
 }
 
-void RBT::fixInsert(TreeNode *&node){
+template <class T>
+void RBT<T>::fixInsert(TreeNode<T> *&node){
   while(root != node){
 
-    TreeNode *parent = node->parent;
+    TreeNode<T> *parent = node->parent;
     if(parent->parent == nullptr){
       break;
     }
-    TreeNode *grandpa = parent->parent;
+    TreeNode<T> *grandpa = parent->parent;
 
     if(grandpa->left != nullptr && grandpa->right != nullptr){
       if(grandpa->left->color == 'r' && grandpa->right->color == 'r' && node->color == 'r'){
@@ -219,7 +246,7 @@ void RBT::fixInsert(TreeNode *&node){
     }else if(node->color == 'b' && parent->color == 'r' && grandpa->color == 'b'){
       break;
     }
-    TreeNode *greatGrandpa;
+    TreeNode<T> *greatGrandpa;
     bool grandpaIsLeftChild;
 
     if(grandpa->left == parent){
@@ -285,7 +312,8 @@ void RBT::fixInsert(TreeNode *&node){
   root->color = 'b';
 }
 
-void RBT::rightRotation(TreeNode* child, TreeNode* parent){
+template <class T>
+void RBT<T>::rightRotation(TreeNode<T>* child, TreeNode<T>* parent){
   if(child->right != nullptr){
     parent->left = child->right;
     child->right->parent = parent;
@@ -307,7 +335,8 @@ void RBT::rightRotation(TreeNode* child, TreeNode* parent){
   parent->parent = child;
 }
 
-void RBT::leftRotation(TreeNode* child, TreeNode* parent){
+template <class T>
+void RBT<T>::leftRotation(TreeNode<T>* child, TreeNode<T>* parent){
   if(child->left != nullptr){
     parent->right = child->left;
     child->left->parent = parent;
@@ -333,9 +362,10 @@ void RBT::leftRotation(TreeNode* child, TreeNode* parent){
 
 
 
-TreeNode* RBT::getMin(){
-  TreeNode* current = root;
-  TreeNode* parent = current;
+template <class T>
+TreeNode<T>* RBT<T>::getMin(){
+  TreeNode<T>* current = root;
+  TreeNode<T>* parent = current;
   while(current != nullptr){
     parent = current;
     current = current->left;
@@ -344,9 +374,10 @@ TreeNode* RBT::getMin(){
   return parent;
 }
 
-TreeNode* RBT::getMax(){
-  TreeNode* current = root;
-  TreeNode* parent = current;
+template <class T>
+TreeNode<T>* RBT<T>::getMax(){
+  TreeNode<T>* current = root;
+  TreeNode<T>* parent = current;
   while(current != nullptr){
     parent = current;
     current = current->right;
@@ -355,8 +386,9 @@ TreeNode* RBT::getMax(){
   return parent;
 }
 
-bool RBT::contains(int value){
-  TreeNode* current = root;
+template <class T>
+bool RBT<T>::contains(T value){
+  TreeNode<T>* current = root;
   while(true){
     if(current == nullptr){
       return false;
@@ -372,10 +404,11 @@ bool RBT::contains(int value){
   }
 }
 
-bool RBT::deleter(int k){
-  TreeNode* current = root;
-  TreeNode* parent = current;
-  TreeNode* nodeToDelete = nullptr;
+template <class T>
+bool RBT<T>::deleter(T k){
+  TreeNode<T>* current = root;
+  TreeNode<T>* parent = current;
+  TreeNode<T>* nodeToDelete = nullptr;
   bool isLeft;//checks if node is a left or right child
   while(true){
     if(current == nullptr){
@@ -397,7 +430,7 @@ bool RBT::deleter(int k){
   if(current->left != nullptr){//check if there is a left value so we know there is a successor
     nodeToDelete = getSuccessor(current);
     bool doubleBlackExists = false;
-    TreeNode* successorParent = nodeToDelete->parent;
+    TreeNode<T>* successorParent = nodeToDelete->parent;
     swapValue(current, nodeToDelete);
     if(nodeToDelete->color == 'r'){
       if(successorParent->left == nodeToDelete){
@@ -456,7 +489,7 @@ bool RBT::deleter(int k){
         }
       }
       leftIsDoubleBlack = isLeft;
-      TreeNode* deletersParent = nodeToDelete->parent;// for nodes by itself when it deleted its parent has the double black node
+      TreeNode<T>* deletersParent = nodeToDelete->parent;// for nodes by itself when it deleted its parent has the double black node
       nodeToDelete->parent = nullptr;
       if(deletedNodeHadChildren){
         fixDoubleBlack(nodeToDelete->right, leftIsDoubleBlack);
@@ -469,15 +502,17 @@ bool RBT::deleter(int k){
 
 }
 
-TreeNode* RBT::getSuccessor(TreeNode* d){
-  TreeNode* successor = d->left;
+template <class T>
+TreeNode<T>* RBT<T>::getSuccessor(TreeNode<T>* d){
+  TreeNode<T>* successor = d->left;
   while(successor->right != nullptr){
     successor = successor->right;
   }
   return successor;
 }
 
-void RBT::fixDoubleBlack(TreeNode* node, bool isLeft){
+template <class T>
+void RBT<T>::fixDoubleBlack(TreeNode<T>* node, bool isLeft){
 
   if(isLeft){
     if(node->right != nullptr){
